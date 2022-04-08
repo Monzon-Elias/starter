@@ -1,2 +1,3 @@
-get http://localhost:3000/api/v1/tours
 
+
+get  http://localhost:3000/api/v1/users
