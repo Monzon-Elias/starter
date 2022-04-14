@@ -11,5 +11,13 @@
   "dependencies": {
     "express": "^4.17.3",
     "morgan": "^1.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Monzon-Elias/starter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Monzon-Elias/starter/issues"
+  },
+  "homepage": "https://github.com/Monzon-Elias/starter#readme"
 }
