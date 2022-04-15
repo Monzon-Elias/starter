@@ -5,12 +5,23 @@ const { application } = require('express');
 /* Middlewares */
 const app = express();
 app.use(express.json());
+/*Serving static files from the server */
+app.use(express.static(`${__dirname}/public`));
 app.use((req, res, next) => {
   console.log('hello from the middleware!');
   next();
 });
+
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  next();
+});
+
+app.param('id', (req, res, next, val) => {
+  console.log(`Tour id is: ${val}`);
+  if (+req.params.id > tours.length) {
+    return res.status(404).json({ status: 'fail', message: 'Invalid ID' });
+  }
   next();
 });
 
@@ -36,7 +47,6 @@ const getOneTour = (req, res) => {
   if (!tour) {
     return res.status(404).json({ status: 'fail', message: 'Invalid ID' });
   }
-
   res.status(200).json({ status: 'success', data: { tour } });
 };
 
@@ -56,9 +66,6 @@ const postNewTour = (req, res) => {
 };
 
 const updateTour = (req, res) => {
-  if (+req.params.id > tours.length) {
-    return res.status(404).json({ status: 'fail', message: 'Invalid ID' });
-  }
   res
     .status(200)
     .json({ status: 'success', data: { tour: '<Updated tour here...>' } });
@@ -107,6 +114,7 @@ const deleteUser = (req, res) => {
 /*Routes */
 /*Tours */
 app.route('/api/v1/tours').get(getAllTours).post(postNewTour);
+
 app
   .route('/api/v1/tours/:id')
   .get(getOneTour)
@@ -115,6 +123,7 @@ app
 
 /*Users */
 app.route('/api/v1/users').get(getAllUsers).post(postUser);
+
 app
   .route('/api/v1/users/:id')
   .get(getUser)
