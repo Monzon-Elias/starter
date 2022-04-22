@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
-const { application } = require('express');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 /* Middlewares */
 const app = express();
@@ -130,5 +131,54 @@ app
   .patch(updateUser)
   .delete(deleteUser);
 
-const port = 3000;
+/********************************************************************** */
+/*CONFIG Mongoose - mongoose & dotenv required in the top
+  /********************************************************************** */
+dotenv.config({ path: './config.env' });
+const db = process.env.DB.replace('<PASSWORD>', process.env.DB_PASS);
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then((con) => {
+    console.log(con.connections);
+    console.log('db connection successful!');
+  });
+/*Schema */
+const tourSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'A tour must have a name'],
+    unique: true,
+  },
+  rating: {
+    type: Number,
+    default: 4.5,
+  },
+  price: {
+    type: Number,
+    required: [true, 'A tour must have a price'],
+  },
+});
+/*Model*/
+const Tour = mongoose.model('Tour', tourSchema);
+
+/*Instance of the Model*/
+const testTour = new Tour({
+  name: 'The Park Camper',
+  price: 323,
+});
+/*Saving it on the db*/
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+  })
+  .catch((err) => {
+    console.log('ERROR:', err);
+  });
+
+const port = process.env.PORT;
 app.listen(port, () => console.log(`App is running on port ${port}...`));
