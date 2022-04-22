@@ -18,6 +18,10 @@ app.use((req, res, next) => {
   next();
 });
 
+const tours = JSON.parse(
+  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+);
+
 app.param('id', (req, res, next, val) => {
   console.log(`Tour id is: ${val}`);
   if (+req.params.id > tours.length) {
@@ -25,10 +29,6 @@ app.param('id', (req, res, next, val) => {
   }
   next();
 });
-
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
-);
 
 /*Functions handlers */
 /*Tours*/
