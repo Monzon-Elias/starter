@@ -1,6 +1,4 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
@@ -25,21 +23,5 @@ app.use('/api/v1/tours', tourRouter);
 
 /*Mounting the Users Route */
 app.use('/api/v1/users', userRouter);
-
-/********************************************************************** */
-/*CONFIG Mongoose - mongoose & dotenv required in the top
-/********************************************************************** */
-
-dotenv.config({ path: './config.env' });
-const db = process.env.DB.replace('<PASSWORD>', process.env.DB_PASS);
-mongoose
-  .connect(db, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
-  .then(() => {
-    console.log('db connection successful!');
-  });
 
 module.exports = app;
