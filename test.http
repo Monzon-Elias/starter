@@ -1,6 +1,6 @@
 
 
-get  http://127.0.0.1:3000/api/v1/tours
+get  http://127.0.0.1:3000/api/v1/tours/monthly-plan/2021
 # PATCH http://127.0.0.1:3000/api/v1/tours/62622ba4bcea771dd88acfdb HTTP/1.1
 # Content-Type: application/json
 # Authorization: price
