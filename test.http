@@ -4,3 +4,17 @@ get  http://127.0.0.1:3000/api/v1/tours/tour-stats
 # Content-Type: application/json
 # Authorization: price
 # { "price": 500 }
+
+# post http://127.0.0.1:3000/api/v1/tours
+# Content-Type: application/json
+
+# {
+#     "name": "Tour megahyper",
+#     "duration": 1,
+#     "maxGroupSize": 1,
+#     "difficulty": "difficult",
+#     "price": 1,
+#     "summary": "Test tour",
+#     "imageCover": "tour-3-cover.jpg",
+#     "secretTour": true
+# }
