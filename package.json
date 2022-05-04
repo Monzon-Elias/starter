@@ -4,8 +4,9 @@
   "description": "Learning node, express, and mongo",
   "main": "app.js",
   "scripts": {
-    "start:dev": "nodemon server.js",
-    "start:prod": "NODE_ENV=production nodemon app.js"
+    "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon app.js",
+    "debug": "ndb server.js"
   },
   "author": "Jonas S.",
   "license": "ISC",
@@ -34,6 +35,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
+    "ndb": "^1.1.5",
     "prettier": "^2.6.2"
   },
   "engines": {
