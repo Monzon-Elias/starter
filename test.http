@@ -1,5 +1,9 @@
 
-//get  http://127.0.0.1:3000/api/v1/tours/fdfd
+get  http://127.0.0.1:3000/api/v1/users/signup
+# PATCH http://127.0.0.1:3000/api/v1/tours/62622ba4bcea771dd88acfdb HTTP/1.1
+# Content-Type: application/json
+# Authorization: price
+# { "price": 500 }
 
 # post http://127.0.0.1:3000/api/v1/tours
 # Content-Type: application/json
@@ -14,13 +18,3 @@
 #     "imageCover": "tour-3-cover.jpg",
 #     "secretTour": true
 # }
-
-post http://127.0.0.1:3000/api/v1/users/signup
-Content-Type: application/json
-
-{
-    "name": "jonas",
-    "email": "elios@elios.com",
-    "password": "1234",
-    "passwordConfirm": "1234"
-}
