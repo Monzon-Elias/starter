@@ -18,11 +18,6 @@ const userSchema = new mongoose.Schema({
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
   photo: String,
-  role: {
-    type: String,
-    enum: ['user', 'guide', 'lead-guide', 'admin'],
-    default: 'user',
-  },
   password: {
     type: String,
     required: [true, 'Please, provide a password'],
@@ -41,10 +36,22 @@ const userSchema = new mongoose.Schema({
       message: 'Password are not the same!',
     },
   },
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user',
+  },
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
+
+//Note: 'pre' -> something that will happend before the query, in the bellow case, a 'save query
 
 userSchema.pre('save', async function (next) {
   //Only run this function if password was actually modified
@@ -53,6 +60,13 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
   //Delete passwordConfirm to not persist in the db
   this.passwordConfirm = undefined;
+  next();
+});
+
+//applying to all queries that start with 'find' *regx
+userSchema.pre(/^find/, function (next) {
+  //this points to the current query
+  this.find({ active: { $ne: false } }); //not equal to false. If we put active: true, it matches no user created before this active thing implementation, bc those users have no such a field
   next();
 });
 
