@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 //const validator = require('validator')
 
+//const User = require('./userModel'); this was imported fot the embedding code below
+
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -74,8 +76,42 @@ const tourSchema = new mongoose.Schema(
       select: false,
     },
     startDates: [Date],
-    secretTour: Boolean,
-    default: false,
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
+    startLocation: {
+      //GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    //guides: Array, --it was like this for the embedding code below
+    guides: [
+      // --this option is for referencing child documents (users)
+      {
+        type: mongoose.Schema.ObjectId, // --this is where the reference happens
+        ref: 'User',
+      },
+    ],
   },
   /*Schema Options Object */
   {
@@ -96,6 +132,14 @@ tourSchema.pre('save', function (next) {
 });
 // You can have more middlewares here
 //QUERY MIDDLEWARE - allow to run functions before or after queries are executed
+
+//EMBEDDING GUIDES USERS INSIDE TOUR DOCUMENT
+/* tourSchema.pre('save', async function (next) {
+  const guidesPromises = this.guides.map(async (id) => await User.findById(id));
+  this.guides = await Promise.all(guidesPromises);
+  next(); 
+});*/
+
 //note 1) /^find/ is a regex that means: all query that starts with 'find'
 //note 2) $ne operator means 'not equal'
 tourSchema.pre(/^find/, function (next) {
@@ -103,10 +147,19 @@ tourSchema.pre(/^find/, function (next) {
   this.start = Date.now();
   next();
 });
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
+});
+
 tourSchema.post(/^find/, function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
   next();
 });
+
 //AGGREGATION MIDDLEWARE
 //note 1) aggregation is a pipeline
 //note 2) unshift() adds an element at the beginning of an array (pure js)

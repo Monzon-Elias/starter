@@ -29,7 +29,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 });
 
 exports.getOneTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id); //the populate will fill the document with embeded data, except the 'select' values (check the minus simbol at the beginning)
   // Tour.findOne({ _id: req.params.id })
 
   if (!tour) {
