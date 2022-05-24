@@ -123,6 +123,16 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+//Virtual Populate
+//It allows us to keep a reference of the child documents in the parent doc.
+//without persisting this info into the db.
+
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 //DOCUMENT MIDDLEWARE: runs before .save() & .create()
 //note 1) 'hook' & 'middleware' are the same thing in this context
 //note 2) 'pre' for the middleware to happen before the 'save' hook
@@ -165,9 +175,9 @@ tourSchema.post(/^find/, function (docs, next) {
 //note 2) unshift() adds an element at the beginning of an array (pure js)
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  console.log(this.pipeline());
   next();
 });
+
 /*Model*/
 const Tour = mongoose.model('Tour', tourSchema);
 
