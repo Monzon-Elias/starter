@@ -128,9 +128,9 @@ tourSchema.virtual('durationWeeks').get(function () {
 //without persisting this info into the db.
 
 tourSchema.virtual('reviews', {
-  ref: 'Review',
-  foreignField: 'tour',
-  localField: '_id',
+  ref: 'Review', //model we want to reference
+  foreignField: 'tour', //the field in the foreign model we want to reference
+  localField: '_id', //the local name for the foreign field 'tour' (above)
 });
 
 //DOCUMENT MIDDLEWARE: runs before .save() & .create()
