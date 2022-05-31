@@ -1,7 +1,7 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
-const reviewRouter = require('../routes/reviewRoutes');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
@@ -10,20 +10,35 @@ router.use('/:tourId/reviews', reviewRouter); //we send incoming queries to this
 router
   .route('/top-5-cheap')
   .get(tourController.aliasTopTours, tourController.getAllTours);
+
 router.route('/tour-stats').get(tourController.getTourStats);
-router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
+
+//Protect all routes after this middleware *middlewares work in sequence
+router.use(authController.protect);
+
+router
+  .route('/monthly-plan/:year')
+  .get(
+    authController.restrictTo('admin', 'lead-guide', 'guide'),
+    tourController.getMonthlyPlan
+  );
 
 router
   .route('/')
-  .get(authController.protect, tourController.getAllTours)
-  .post(tourController.postNewTour);
+  .get(tourController.getAllTours)
+  .post(
+    authController.restrictTo('admin', 'lead-guide'),
+    tourController.postNewTour
+  );
 
 router
   .route('/:id')
   .get(tourController.getOneTour)
-  .patch(tourController.updateTour)
+  .patch(
+    authController.restrictTo('admin', 'lead-guide'),
+    tourController.updateTour
+  )
   .delete(
-    authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour
   );

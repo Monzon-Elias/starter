@@ -53,26 +53,31 @@ const userSchema = new mongoose.Schema({
 
 //Note: 'pre' -> something that will happend before the query, in the bellow case, a 'save query
 
-userSchema.pre('save', async function (next) {
+/*userSchema.pre('save', async function (next) {
+  
   //Only run this function if password was actually modified
-  if (!this.isModified('password')) return next();
+   if (!this.isModified('password')) return next();
+  
   //Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
+  
   //Delete passwordConfirm to not persist in the db
   this.passwordConfirm = undefined;
   next();
 });
 
+
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+  
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+}); */
+
 //applying to all queries that start with 'find' *regx
 userSchema.pre(/^find/, function (next) {
   //this points to the current query
   this.find({ active: { $ne: false } }); //not equal to false. If we put active: true, it matches no user created before this active thing implementation, bc those users have no such a field
-  next();
-});
-
-userSchema.pre('save', function (next) {
-  if (!this.isModified('password') || this.isNew) return next();
-  this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
@@ -106,6 +111,7 @@ userSchema.methods.createPasswordResetToken = function () {
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000; //milliseconds
   return resetToken;
 };
+
 /*Model*/
 const User = mongoose.model('User', userSchema);
 module.exports = User;
