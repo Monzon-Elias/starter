@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Tour = require('./tourModel');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -36,6 +37,8 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true }); //this will avoid users to do duplicate reviews
+
 reviewSchema.pre(/^find/, function (next) {
   // this.populate({
   //   path: 'tour',
@@ -50,6 +53,51 @@ reviewSchema.pre(/^find/, function (next) {
   });
 
   next();
+});
+
+//Static method
+reviewSchema.statics.calcAverageRatings = async function (tourId) {
+  //being a static method, it belongs to the model. Aggregage needs to point to the model.
+  const stats = await this.aggregate([
+    {
+      $match: { tour: tourId },
+    },
+    {
+      $group: {
+        _id: '$tour',
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+
+  if (stats.length > 0) {
+    //only if stats has something, error if not.
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5,
+    });
+  }
+};
+
+reviewSchema.post('save', function () {
+  //this points to current review
+  this.constructor.calcAverageRatings(this.tour); //this points to the current doc, while constructor points to the model that created this doc.
+});
+
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.r = await this.findOne(); //store the doc in the model
+  next();
+});
+
+reviewSchema.post(/^findOneAnd/, async function () {
+  //await this.findOne(); does not work here bc query has already executed
+  await this.r.constructor.calcAverageRatings(this.r.tour);
 });
 
 /*Model*/

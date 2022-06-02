@@ -37,6 +37,7 @@ const tourSchema = new mongoose.Schema(
       default: 4.5,
       min: [1, 'Rating must be above 1.0'],
       max: [5, 'Rating must be below 5.0'],
+      set: (val) => Math.round(val * 10) / 10, // 4.66666, 46.6666, 47, 4.7 - 'set' will execute each time a value is added
     },
     ratingsQuantity: {
       type: Number,
@@ -119,13 +120,18 @@ const tourSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-tourSchema.virtual('durationWeeks').get(function () {
-  return this.duration / 7;
-});
+
+//Indexes
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
 
 //Virtual Populate
 //It allows us to keep a reference of the child documents in the parent doc.
 //without persisting this info into the db.
+
+tourSchema.virtual('durationWeeks').get(function () {
+  return this.duration / 7;
+});
 
 tourSchema.virtual('reviews', {
   ref: 'Review', //model we want to reference
@@ -163,6 +169,7 @@ tourSchema.pre(/^find/, function (next) {
     path: 'guides',
     select: '-__v -passwordChangedAt',
   });
+  next();
 });
 
 tourSchema.post(/^find/, function (docs, next) {
@@ -173,10 +180,10 @@ tourSchema.post(/^find/, function (docs, next) {
 //AGGREGATION MIDDLEWARE
 //note 1) aggregation is a pipeline
 //note 2) unshift() adds an element at the beginning of an array (pure js)
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
 
 /*Model*/
 const Tour = mongoose.model('Tour', tourSchema);
