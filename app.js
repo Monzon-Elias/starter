@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -12,9 +13,16 @@ const globalErrorHandler = require('./controllers/errorController');
 const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
-///////////////////
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+////////////////////////
 /* Global Middlewares */
-///////////////////
+////////////////////////
+
+/*Serving static files from the server */
+app.use(express.static(path.join(__dirname, 'public')));
 
 //Set security HTTP headers (it ads a lot of security headers to the request)
 app.use(helmet());
@@ -49,15 +57,23 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-/*Serving static files from the server */
-app.use(express.static(`${__dirname}/public`));
-
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
 
+////////////////////////
+///////* Routes *///////
+////////////////////////
+
+/*For the views */
+app.get('/', (req, res) => {
+  res.status(200).render('base', {
+    tour: 'The Forest Hiker',
+    user: 'Jonas',
+  });
+});
 /*Mounting the Tours Route */
 app.use('/api/v1/tours', tourRouter);
 /*Mounting the Users Route */
