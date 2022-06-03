@@ -124,6 +124,7 @@ const tourSchema = new mongoose.Schema(
 //Indexes
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' }); //GeoJSON geometry index- Geospatial feature in mongo
 
 //Virtual Populate
 //It allows us to keep a reference of the child documents in the parent doc.
