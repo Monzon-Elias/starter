@@ -58,6 +58,17 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/overview', (req, res) => {
+  res.status(200).render('overview', {
+    title: 'All Tours',
+  });
+});
+
+app.get('/tour', (req, res) => {
+  res.status(200).render('tour', {
+    title: 'The Forest Hiker Tour',
+  });
+});
 /*Mounting the Tours Route */
 app.use('/api/v1/tours', tourRouter);
 /*Mounting the Users Route */
