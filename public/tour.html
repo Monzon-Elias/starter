@@ -10,7 +10,7 @@
     />
 
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="./img/favicon.png" />
 
     <title>Natours | The Park Camper Tour</title>
 
@@ -27,7 +27,7 @@
         <form class="nav__search">
           <button class="nav__search-btn">
             <svg>
-              <use xlink:href="img/icons.svg#icon-search"></use>
+              <use xlink:href="./img/icons.svg#icon-search"></use>
             </svg>
           </button>
           <input
@@ -38,7 +38,7 @@
         </form>
       </nav>
       <div class="header__logo">
-        <img src="img/logo-white.png" alt="Natours logo" />
+        <img src="./img/logo-white.png" alt="Natours logo" />
       </div>
       <nav class="nav nav--user">
         <a href="#" class="nav__el">My bookings</a>
@@ -66,13 +66,13 @@
         <div class="heading-box__group">
           <div class="heading-box__detail">
             <svg class="heading-box__icon">
-              <use xlink:href="img/icons.svg#icon-clock"></use>
+              <use xlink:href="./img/icons.svg#icon-clock"></use>
             </svg>
             <span class="heading-box__text">10 days</span>
           </div>
           <div class="heading-box__detail">
             <svg class="heading-box__icon">
-              <use xlink:href="img/icons.svg#icon-map-pin"></use>
+              <use xlink:href="./img/icons.svg#icon-map-pin"></use>
             </svg>
             <span class="heading-box__text">Las Vegas, USA</span>
           </div>
@@ -205,67 +205,67 @@
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [-112.987418, 37.198125]
+                coordinates: [-112.987418, 37.198125],
               },
               properties: {
-                description: 'Zion Canyon National Park'
-              }
+                description: 'Zion Canyon National Park',
+              },
             },
             {
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [-111.376161, 36.86438]
+                coordinates: [-111.376161, 36.86438],
               },
               properties: {
-                description: 'Antelope Canyon'
-              }
+                description: 'Antelope Canyon',
+              },
             },
             {
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [-112.115763, 36.058973]
+                coordinates: [-112.115763, 36.058973],
               },
               properties: {
-                description: 'Grand Canyon National Park'
-              }
+                description: 'Grand Canyon National Park',
+              },
             },
             {
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [-116.107963, 34.011646]
+                coordinates: [-116.107963, 34.011646],
               },
               properties: {
-                description: 'Joshua Tree National Park'
-              }
-            }
-          ]
+                description: 'Joshua Tree National Park',
+              },
+            },
+          ],
         };
 
         const map = new mapboxgl.Map({
           container: 'map',
           style: 'mapbox://styles/jonasschmedtmann/cjnxfn3zk7bj52rpegdltx58h',
-          scrollZoom: false
+          scrollZoom: false,
         });
 
         const bounds = new mapboxgl.LngLatBounds();
 
-        geojson.features.forEach(function(marker) {
+        geojson.features.forEach(function (marker) {
           var el = document.createElement('div');
           el.className = 'marker';
 
           new mapboxgl.Marker({
             element: el,
-            anchor: 'bottom'
+            anchor: 'bottom',
           })
             .setLngLat(marker.geometry.coordinates)
             .addTo(map);
 
           new mapboxgl.Popup({
             offset: 30,
-            closeOnClick: false
+            closeOnClick: false,
           })
             .setLngLat(marker.geometry.coordinates)
             .setHTML('<p>' + marker.properties.description + '</p>')
@@ -279,11 +279,11 @@
             top: 200,
             bottom: 150,
             left: 50,
-            right: 50
-          }
+            right: 50,
+          },
         });
 
-        map.on('load', function() {
+        map.on('load', function () {
           map.addLayer({
             id: 'route',
             type: 'line',
@@ -298,20 +298,20 @@
                     [-112.987418, 37.198125],
                     [-111.376161, 36.86438],
                     [-112.115763, 36.058973],
-                    [-116.107963, 34.011646]
-                  ]
-                }
-              }
+                    [-116.107963, 34.011646],
+                  ],
+                },
+              },
             },
             layout: {
               'line-join': 'round',
-              'line-cap': 'round'
+              'line-cap': 'round',
             },
             paint: {
               'line-color': '#55c57a',
               'line-opacity': 0.6,
-              'line-width': 3
-            }
+              'line-width': 3,
+            },
           });
         });
       </script>
