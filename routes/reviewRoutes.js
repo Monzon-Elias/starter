@@ -16,7 +16,7 @@ router
     reviewController.createReview
   );
 
-//only users and admins can post or delete reviews. It's contrary to the business for leads to do it.
+//only users and admins can post or delete reviews. It's contrary to the business rules for leads to do it.
 router
   .route('/:id')
   .get(reviewController.getReview)
