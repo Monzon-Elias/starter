@@ -26,7 +26,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Set security HTTP headers (it ads a lot of security headers to the request)
-app.use(helmet());
+//This options passed as properties to helmet are because the map did not download bc these 2 properties where blocking content to be downloaded
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
 
 //Body parser, reading data from body into req.body with a limit in the payload
 app.use(express.json({ limit: '10kb' }));
