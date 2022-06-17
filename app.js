@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -12,7 +13,6 @@ const userRouter = require('./routes/userRoutes');
 const tourRouter = require('./routes/tourRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
-const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -35,8 +35,18 @@ app.use(
   })
 );
 
+//Limiting the amount of requests per hour
+const limiter = rateLimit({
+  max: 100, //100 requests from 1 IP (increase it if your app needs to do more requests)
+  windowMs: 60 * 60 * 1000, //1 hour
+  message: 'Too many request from this IP, please try again in 1 hour!',
+});
+
+app.use('/api', limiter);
+
 //Body parser, reading data from body into req.body with a limit in the payload
 app.use(express.json({ limit: '10kb' }));
+//Cookie parser, reading data from the cookies
 app.use(cookieParser());
 
 //Data sanitization against NoSQL query injection
@@ -58,13 +68,6 @@ app.use(
     ],
   })
 );
-//Limiting the amount of requests per hour
-const limiter = rateLimit({
-  max: 100, //100 requests from 1 IP (increase it if your app needs to do more requests)
-  windowMs: 60 * 60 * 1000, //1 hour
-  message: 'Too many request frim this IP, please try again in 1 hour!',
-});
-app.use('/api', limiter);
 
 //Test middleware
 app.use((req, res, next) => {
