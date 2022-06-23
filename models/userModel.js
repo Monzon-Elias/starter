@@ -58,7 +58,7 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 
   //Hash the password with cost of 12
-  this.password = await bcrypt.hash(this.password, 12);
+  this.password = await bcrypt.hash(this.password, 12); //commenting this you cannot login when a user you create (problem to login with jonas users, but when I create a new user, no problem)
 
   //Delete passwordConfirm to not persist in the db
   this.passwordConfirm = undefined;

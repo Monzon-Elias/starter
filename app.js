@@ -46,6 +46,7 @@ app.use('/api', limiter);
 
 //Body parser, reading data from body into req.body with a limit in the payload
 app.use(express.json({ limit: '10kb' }));
+
 //Cookie parser, reading data from the cookies
 app.use(cookieParser());
 
@@ -72,7 +73,7 @@ app.use(
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
+  //console.log(req.cookies);
   next();
 });
 
