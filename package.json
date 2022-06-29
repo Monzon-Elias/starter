@@ -2,22 +2,18 @@
   "name": "natours",
   "version": "1.0.0",
   "description": "Learning node, express, and mongo",
-  "main": "app.js",
-  "targets": {
-    "main": false
-  },
+  "main": "bundle.js",
+  "source": "public/js/index.js",
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
-    "watch:js": "parcel serve ./public/js/index.js --dist-dir ./public/js/bundled",
-    "build": "parcel build ./public/js/index.js --dist-dir ./public/js/bundled"
+    "watch": "parcel watch",
+    "build": "parcel build"
   },
   "author": "Jonas S.",
   "license": "ISC",
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
-    "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
@@ -44,7 +40,6 @@
   },
   "homepage": "https://github.com/Monzon-Elias/starter#readme",
   "devDependencies": {
-    "buffer": "^6.0.3",
     "eslint": "^8.13.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -54,9 +49,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
     "ndb": "^1.1.5",
-    "parcel": "^2.6.2",
-    "prettier": "^2.6.2",
-    "process": "^0.11.10"
+    "prettier": "^2.6.2"
   },
   "engines": {
     "node": ">10.0.0"
