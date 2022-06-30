@@ -4,9 +4,9 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-router.use(authController.isLoggedIn); //adding this middleware here will make all the following routers visible only to logged in users
-router.get('/', viewController.getOverview);
-router.get('/tour/:slug', viewController.getTour); //no puse el '/' decue de 'tour' y me torturó hasta q lo encontré
-router.get('/login', viewController.getLoginForm);
+router.get('/', authController.isLoggedIn, viewController.getOverview);
+router.get('/tour/:slug', authController.isLoggedIn, viewController.getTour); //no puse el '/' decue de 'tour' y me torturó hasta q lo encontré
+router.get('/login', authController.isLoggedIn, viewController.getLoginForm);
+router.get('/me', authController.protect, viewController.getAccount);
 
 module.exports = router;
