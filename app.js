@@ -92,7 +92,7 @@ app.use('/api/v1/users', userRouter);
 /*Mounting the Reviews Route */
 app.use('/api/v1/reviews', reviewRouter);
 /*Mounting the Booking Route */
-app.use('/api/v1/booking', bookingRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

@@ -532,16 +532,18 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"f2QDv":[function(require,module,exports) {
-var _polyfill = require("@babel/polyfill"); //for old browsers compatibility...i think
+/* eslint-disable */ var _polyfill = require("@babel/polyfill"); //for old browsers compatibility...i think
 var _mapbox = require("./mapbox");
 var _login = require("./login");
 var _updateSettings = require("./updateSettings");
+var _stripe = require("./stripe");
 //DOM Elements
 const mapBox = document.getElementById("map");
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".nav__el--logout");
 const userDataForm = document.querySelector(".form-user-data");
 const userPasswordForm = document.querySelector(".form-user-password");
+const bookBtn = document.getElementById("book-tour");
 //Delegation
 if (mapBox) {
     const locations = JSON.parse(mapBox.dataset.locations);
@@ -549,11 +551,15 @@ if (mapBox) {
 }
 if (loginForm) loginForm.addEventListener("submit", (e)=>{
     e.preventDefault();
+    console.log("login form pues");
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     (0, _login.login)(email, password);
 });
-if (logOutBtn) logOutBtn.addEventListener("click", (0, _login.logout));
+if (logOutBtn) logOutBtn.addEventListener("click", ()=>{
+    console.log("apretastes logout?!");
+    0, _login.logout;
+});
 if (userDataForm) userDataForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const form = new FormData();
@@ -578,8 +584,14 @@ if (userPasswordForm) userPasswordForm.addEventListener("submit", async (e)=>{
     document.getElementById("password").value = "";
     document.getElementById("password-confirm").value = "";
 });
+if (bookBtn) bookBtn.addEventListener("click", (e)=>{
+    e.target.textContent = "Processing...";
+    const { tourId  } = e.target.dataset;
+    console.log(tourId);
+    (0, _stripe.bookTour)(tourId);
+});
 
-},{"@babel/polyfill":"dTCHC","./mapbox":"3zDlz","./login":"7yHem","./updateSettings":"l3cGY"}],"dTCHC":[function(require,module,exports) {
+},{"@babel/polyfill":"dTCHC","./mapbox":"3zDlz","./login":"7yHem","./updateSettings":"l3cGY","./stripe":"10tSC"}],"dTCHC":[function(require,module,exports) {
 "use strict";
 require("./noConflict");
 var _global = _interopRequireDefault(require("core-js/library/fn/global"));
@@ -11041,6 +11053,29 @@ const updateSettings = async (data, type)=>{
         if (res.data.status === "success") (0, _alerts.showAlert)("success", `${type.toUpperCase()} updated successfully!`);
     } catch (err) {
         (0, _alerts.showAlert)("error", err.response.data.message);
+    }
+};
+
+},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"10tSC":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "bookTour", ()=>bookTour);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _alerts = require("./alerts");
+/* eslint-disable */ const stripe = Stripe("pk_test_51LJOYVFWrHRdbOhj5tDN2lL3cZX8ajMqojgBb7vawT0WFe2TDg4kzL0Kz6WCjj9osvewbntEUlRbi2rRVudWX7ob00OklUErJY");
+const bookTour = async (tourId)=>{
+    try {
+        //1. Get checkout session from API
+        const session = await (0, _axiosDefault.default)(`http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`);
+        console.log(session);
+        //2. Create checkout from + change credit card
+        await stripe.redirectToCheckout({
+            sessionId: session.data.session.id
+        });
+    } catch (err) {
+        console.log(err);
+        (0, _alerts.showAlert)("error", err);
     }
 };
 

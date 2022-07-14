@@ -50,6 +50,7 @@
   "homepage": "https://github.com/Monzon-Elias/starter#readme",
   "devDependencies": {
     "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
     "eslint": "^8.13.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -58,10 +59,16 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
+    "events": "^3.3.0",
+    "https-browserify": "^1.0.0",
     "ndb": "^1.1.5",
     "parcel": "^2.6.2",
     "prettier": "^2.6.2",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "querystring-es3": "^0.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0"
   },
   "engines": {
     "node": ">10.0.0"
