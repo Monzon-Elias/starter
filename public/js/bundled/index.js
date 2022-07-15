@@ -11060,12 +11060,12 @@ const updateSettings = async (data, type)=>{
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "bookTour", ()=>bookTour);
-var _axios = require("axios");
+/* eslint-disable */ var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
-/* eslint-disable */ const stripe = Stripe("pk_test_51LJOYVFWrHRdbOhj5tDN2lL3cZX8ajMqojgBb7vawT0WFe2TDg4kzL0Kz6WCjj9osvewbntEUlRbi2rRVudWX7ob00OklUErJY");
 const bookTour = async (tourId)=>{
     try {
+        const stripe = Stripe("pk_test_51LJOYVFWrHRdbOhj5tDN2lL3cZX8ajMqojgBb7vawT0WFe2TDg4kzL0Kz6WCjj9osvewbntEUlRbi2rRVudWX7ob00OklUErJY"); //this was on the 1st line, don Carlos said to put it here
         //1. Get checkout session from API
         const session = await (0, _axiosDefault.default)(`http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`);
         console.log(session);
