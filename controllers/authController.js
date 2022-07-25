@@ -19,7 +19,7 @@ const createSendToken = (user, statusCode, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 //converting to millisec - days, min, sec, millisec
     ),
-    httpOnly: true, //now it can't be accesed or modified by the browser
+    httpOnly: true, //now it can't be accessed or modified by the browser
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
@@ -47,7 +47,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+  //console.log(url);
   await new Email(newUser, url).sendWelcome;
 
   createSendToken(newUser, 201, res);

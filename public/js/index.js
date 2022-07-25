@@ -22,7 +22,6 @@ if (mapBox) {
 if (loginForm)
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('login form pues');
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     login(email, password);
@@ -30,7 +29,7 @@ if (loginForm)
 
 if (logOutBtn)
   logOutBtn.addEventListener('click', () => {
-    console.log('apretastes logout?!');
+    //console.log('apretastes logout?!');
     logout;
   });
 
@@ -68,6 +67,6 @@ if (bookBtn)
   bookBtn.addEventListener('click', (e) => {
     e.target.textContent = 'Processing...';
     const { tourId } = e.target.dataset;
-    console.log(tourId);
+    //console.log(tourId);
     bookTour(tourId);
   });
