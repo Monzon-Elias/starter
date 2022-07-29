@@ -15,15 +15,20 @@ const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const compression = require('compression');
-
+const cors = require('cors');
 const app = express();
 
+app.enable('trust proxy'); //for deployment on heroku
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 ////////////////////////
 /* Global Middlewares */
 ////////////////////////
+
+//implement CORS
+app.use(cors()); //for allowing requests from other sites to this site (simple requests)
+app.options('*', cors()); //for allowing non-simple requests from other sites to this site
 
 /*Serving static files from the server */
 app.use(express.static(path.join(__dirname, 'public')));

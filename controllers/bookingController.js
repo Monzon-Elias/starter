@@ -2,9 +2,9 @@ const stripe = require('stripe')(
   'sk_test_51LJOYVFWrHRdbOhjm94mZfOd2zTWpexLeD8QGvAroGybXuHkHHyopU563f1ACECqwNbv3c8nOCPSQFBN1oTM5eDA00r5DlVh7X'
 );
 const Tour = require('../models/tourModel');
+const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
-const Booking = require('../models/bookingModel');
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   //1. Get the currently booked tour
@@ -38,9 +38,15 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
 exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   const { tour, user, price } = req.query;
-  if (!tour && !user && !price) return next();
 
+  if (!tour && !user && !price) return next();
   await Booking.create({ tour, user, price });
 
   res.redirect(req.originalUrl.split('?')[0]); //after creating a booking the user will be redirected to the home page '/'
 });
+
+exports.createBooking = factory.postNewOne(Booking);
+exports.getBooking = factory.getOne(Booking);
+exports.getAllBookings = factory.getAll(Booking);
+exports.updateBooking = factory.updateOne(Booking);
+exports.deleteBooking = factory.deleteOne(Booking);

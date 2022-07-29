@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-//Note: 'pre' -> something that will happend before the query, in the bellow case, a 'save query
+//Note: 'pre' -> something that will happen before the query, in the bellow case, a 'save query
 
 userSchema.pre('save', async function (next) {
   //Only run this function if password was actually modified
